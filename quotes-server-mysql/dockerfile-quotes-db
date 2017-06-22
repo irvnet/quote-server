@@ -1,0 +1,17 @@
+FROM centos:7
+MAINTAINER irvingr
+#    echo "create database jpetstore_sit;" | mysql && \
+#    echo "create user 'jpetstore'@'localhost' identified by 'jppwd';" | mysql && \
+#    echo "grant all privileges on jpetstore_sit.* to 'jpetstore'@'localhost';" | mysql
+
+COPY MariaDB.repo /etc/yum.repos.d/MariaDB.repo
+RUN yum -y install --setopt=tsflags=nodocs epel-release && \ 
+    yum -y install --setopt=tsflags=nodocs mariadb-server bind-utils pwgen psmisc hostname && \ 
+    yum -y erase vim-minimal && \
+    yum -y update && yum clean all
+
+COPY docker-entrypoint.sh /
+
+#echo "create database quotes-db;" | mysql
+EXPOSE 3306
+CMD ["/bin/bash"]
